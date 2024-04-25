@@ -25,6 +25,7 @@
 #include "gui.hpp"
 #include "app.hpp"
 #include "error.hpp"
+#include "message.hpp"
 #include "debug.hpp"
 #include "i18n.hpp"
 
@@ -104,16 +105,16 @@ void Gui::Update(playbackInfo_t* playbackInfo)
 	Gui::SetTarget(GFX_BOTTOM);
 	menus.top()->doBottomDraw();
 
-	if (Error::IsQuered()) {
-		Gui::DrawError();
+	if (Message::IsMessageQueued()) {
+		Gui::DrawMessage();
 	}
 
 	C3D_FrameEnd(0);
 	C2D_TextBufClear(g_dynamicBuf);
 
-	if (Error::IsQuered()) {
+	if (Message::IsMessageQueued()) {
 		if (kDown)
-			Error::Remove();
+			Message::Remove();
 		return;
 	}
 
@@ -207,10 +208,13 @@ void Gui::DrawSolidRectangle(float x, float y, float w, float h, u32 color)
 }
 
 static void volumeIndicator(u8 volume) {
-	int indicator = (volume/15);
-	if (indicator < 6) {
-		Gui::DrawImageLayered(sprites_popup_vol_bkg_idx, 120, 30, 0.6f);
-		Gui::DrawImageLayered(indicator + sprites_popup_vol0_idx, 120, 30, 0.6f);
+	if(volume == 0){
+		Gui::DrawImageLayered(sprites_popup_vol_bkg_idx, 136, 30, 0.6f);
+		Gui::DrawImageLayered(sprites_popup_vol0_idx, 136, 30, 0.6f);
+	} else {
+		int indicator = (volume/21);
+		Gui::DrawImageLayered(sprites_popup_vol_bkg_idx, 136, 30, 0.6f);
+		Gui::DrawImageLayered(sprites_popup_vol1_idx + indicator, 136, 30, 0.6f);
 	}
 }
 
@@ -240,7 +244,7 @@ void Gui::DrawBaseGui(void) {
 	Gui::PrintColor(string_minutes, 380, 1, 0.5f, 0.5f, 0xFFFFFFFF);
 	
 	char string_volume[4] = {0};
-	sprintf(string_volume, "%d", (int)((curVol/63.0f)*100));
+	sprintf(string_volume, "Volume: %d%%", (int)((curVol/63.0f)*100));
 	Gui::PrintColor(string_volume, 1, 1, 0.5f, 0.5f, 0xFFFFFFFF);
 	if(curVol != preVol) {
 		trigeredTime = osGetTime();	
@@ -251,27 +255,14 @@ void Gui::DrawBaseGui(void) {
 	preVol = curVol;
 }
 
-void Gui::DrawError(void) {
-	LimeError_t error = Error::Get();
-	int errorcode = error.err_code;
-	char codestr[30];
+void Gui::DrawMessage(void){
+	LimeMessage_t message = Message::Get();
 
-	C2D_DrawRectSolid(10, 10, 0.5f, 300, SCREEN_HEIGHT-20, C2D_Color32(0, 0, 0, 255));
+	C2D_DrawRectSolid(10, 10, 0.5f, 300, SCREEN_HEIGHT-20, COLOR_GRAY);
+	C2D_DrawRectSolid(11, 11, 0.5f, 298, SCREEN_HEIGHT-22, 0xFF000000);
 
-	snprintf(codestr, 30, "Error code: %d", errorcode);
-	Gui::Print(codestr, 20.0f, 20.0f, 0.5f, 0.5f);
-	
-	if (errorcode == FILE_NOT_SUPPORTED) {
-		Gui::Print("ERR: Unrecognized filetype.", 20.0f, 40.0f, 0.5f, 0.5f);
-	}
-	else if (errorcode == DECODER_INIT_FAIL){
-		Gui::Print("ERR: Failed to initalize decoder.", 20.0f, 40.0f, 0.5f, 0.5f);
-	}
-	else if (errorcode == ERRORH_GENERIC);
-	else {
-		Gui::Print("ERR: Undefined error.", 20.0f, 40.0f, 0.5f, 0.5f);
-	}
+	Gui::Print(message.title.c_str(), 20.0f, 20.0f, 0.5f, 0.5f);
 
-	if (error.extra_info.size())
-		Gui::Print(error.extra_info.c_str(), 20.0f, 60.0f, 0.5f, 0.5f);
+	if (message.text.size())
+		Gui::Print(message.text.c_str(), 20.0f, 60.0f, 0.5f, 0.5f);
 }

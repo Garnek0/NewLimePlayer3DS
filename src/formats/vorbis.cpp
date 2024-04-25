@@ -48,7 +48,7 @@ void ProcessInfo(vorbis_comment *comment, metaInfo_t* Meta) {
 		Meta->Artist.assign(ret);
 
 	if (Meta->Artist.empty())
-		Meta->Artist.assign("(No Author-Vorbis)");
+		Meta->Artist.assign("(No Author)");
 }
 
 void VorbisDecoder::UpdateInfo(metaInfo_t* Meta) {

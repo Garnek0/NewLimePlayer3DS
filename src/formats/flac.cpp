@@ -89,7 +89,7 @@ FlacDecoder::~FlacDecoder(void) {
 }
 
 void FlacDecoder::GetInfo(metaInfo_t* Meta) {
-	Meta->Artist.assign("(No Author-Flac)", strlen("(No Author-Flac)"));
+	Meta->Artist.assign("(No Author)", strlen("(No Author)"));
 }
 
 uint32_t FlacDecoder::Position(void) {

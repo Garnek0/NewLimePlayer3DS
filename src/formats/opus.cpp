@@ -78,7 +78,7 @@ void ProcessInfo(const OpusTags *comment, metaInfo_t* Meta) {
 		Meta->Artist.assign(ret);
 
 	if (Meta->Artist.empty())
-		Meta->Artist.assign("(No Author-Opus)");
+		Meta->Artist.assign("(No Author)");
 }
 
 void OpusDecoder::UpdateInfo(metaInfo_t* Meta) {

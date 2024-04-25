@@ -4,6 +4,7 @@
 #include "app.hpp"
 #include "error.hpp"
 #include "config.hpp"
+#include "message.hpp"
 
 #define MAX_LIST 15
 
@@ -48,7 +49,7 @@ SettingsMenu::SettingsMenu()
 
 void SettingsMenu::drawTop() const
 {
-	Gui::Print("Settings Menu", 20.0f, 40.0f, 0.5f, 0.5f);
+	Gui::Print("Settings", 20.0f, 40.0f, 0.5f, 0.5f);
 }
 
 void SettingsMenu::drawBottom() const
@@ -82,7 +83,7 @@ void SettingsMenu::update(touchPosition* touch)
 	{
 		if (cursor+seloffs < settingslist.size()) {
 			if (settingslist[cursor+seloffs].callback())
-				Error::Add(ERRORH_GENERIC, "Failed to execute.");
+				Error::Thrw(E_GENERIC, "Failed to execute.");
 		}
 		return;
 	}
@@ -101,7 +102,9 @@ static bool set_wm_config() {
 
 static bool save_all_settings() {
 	int ret = 0;
-	if (!(ret = Cfg::WriteJson("/3ds/limeplayer3ds/config.json", &App::pInfo.settings)))
-		Error::Add(ERRORH_GENERIC, "Saved successfully.");
+	if (!(ret = Cfg::WriteJson("/3ds/newlimeplayer3ds/config.json", &App::pInfo.settings))){
+		std::string success = "Saved successfully.";
+		Message::Add(success);
+	}
 	return ret;
 }

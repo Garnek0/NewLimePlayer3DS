@@ -195,7 +195,7 @@ int Cfg::WriteJson(const char* outpath, settings_t* settings) {
 	json_t *set_obj = json_object();
 	json_t *pls_json_arr = json_array();
 
-	json_object_set_new(root, "Note", json_string("You can find documentation on LimePlayer3DS's config.json at https://github.com/Oreo639/LimePlayer3DS/wiki/config.json"));
+	json_object_set_new(root, "Note", json_string("You can find documentation on NewLimePlayer3DS's config.json at https://github.com/Oreo639/LimePlayer3DS/wiki/config.json"));
 
 	json_object_set_new(set_obj, SETTING_THEME, json_integer(settings->theme));
 	json_object_set_new(set_obj, SETTING_MIDI, json_string(settings->wildMidiConfig.c_str()));

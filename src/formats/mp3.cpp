@@ -42,7 +42,7 @@ Mp3Decoder::Mp3Decoder(FileTransport *ftrans) : Decoder("Mp3") {
 
 	if((mh = mpg123_new(NULL, &err)) == NULL)
 	{
-		DEBUG("Error: %s\n", mpg123_plain_strerror(err));
+		DEBUG("Error:: %s\n", mpg123_plain_strerror(err));
 		return;
 	}
 
@@ -87,11 +87,11 @@ void Mp3Decoder::GetInfo(metaInfo_t* Meta) {
 			Meta->Artist.assign(v2->artist->p);
 		}
 		else {
-			Meta->Artist.assign("(No Author-Mp3)");
+			Meta->Artist.assign("(No Author)");
 		}
 	}
 	else {
-		Meta->Artist.assign("(No Author-Mp3)");
+		Meta->Artist.assign("(No Author)");
 	}
 }
 
@@ -149,7 +149,7 @@ int Mp3Decoder::Channels(void)
 
 	if((tempMH = mpg123_new(NULL, &err)) == NULL)
 	{
-		DEBUG("Error: %s\n", mpg123_plain_strerror(err));
+		DEBUG("Error:: %s\n", mpg123_plain_strerror(err));
 		return false;
 	}
 

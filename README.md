@@ -1,22 +1,23 @@
-# LimePlayer3DS
-LimePlayer3DS is a graphical music player for the 3ds with metadata parsing and software midi support.
+# IMPORTANT! NewLimePlayer3DS and LimePlayer3DS
+NewLimePlayer3DS is a fork of the original LimePlayer3DS. My goal is to keep the pretty much abandoned LimePlayer3DS alive by implementing some missing features. I do not own all of the code from this repository, most of it belongs to the LimePlayer team.
 
-It checks for music in the `sdmc:/music` folder. If it doesn't exist then it just goes to `sdmc:/`, just like ctrmus. 
-
-The default path for midi patchsets is `/3ds/limeplayer3ds/8mbgmpat/`.
-
-This path be changed in the config file located at `/3ds/limeplayer3ds/config.json` which should be created (if it doesn't already exist) upon launching the application.
-
-More info about LimePlayer3DS's config.json can be found here: <br/>
-https://github.com/Oreo639/LimePlayer3DS/wiki/config.json
-
-[For more information on usage of the various features LimePlayer offers, check here.](https://github.com/Oreo639/LimePlayer3DS/wiki)
+# NewLimePlayer3DS
+NewLimePlayer3DS is a GUI music player for the 3DS with metadata parsing and software MIDI support. For more info, check the [Original LimePlayer3DS Repo](https://github.com/oreo639/LimePlayer3DS)
 
 ## Note
-LimePlayer3DS is currently in alpha so not all features are going to be avalible.
+NewLimePlayer3DS is still in early development. There are missing features and you may encounter bugs.
 
 ## Officaly Supported Formats
-Mp3, Wav, Flac, Midi, Xmi, Mus, Hmi, Hmp, Ogg vorbis, and Opus.
++ MP3 
++ Wave 
++ FLAC 
++ MIDI
++ XMI
++ MUS
++ HMI
++ HMP
++ OGG vorbis
++ Opus
 
 ## Building
 ### Prerequsites:
@@ -48,6 +49,8 @@ Check [CONTRIBUTORS.md](CONTRIBUTORS.md) for more information
 
 + Flagbrew: The GUI code is heavilly based on PKSM's GUI code.
 
++ LimePlayer Team: Developers of the original LimePlayer3D.
+
 + Others: If I forgot to mention someone important (for example: your code is used without credit), please let me know.
 
 + Most of the icons under gfx are from the site [icons8.com](https://icons8.com) and are licensed under the [CC-BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/3.0/)
@@ -60,6 +63,6 @@ Check [CONTRIBUTORS.md](CONTRIBUTORS.md) for more information
 + Testers: For testing, providing feedback, and reporting bugs.
 
 ## Copyright
-The application is licensed under the GPLv3-or-later. Additional terms 7c apply.
+LimePlayer3DS and NewLimePlayer3DS are both licensed under the GPLv3-or-later. Additional terms 7c apply.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.

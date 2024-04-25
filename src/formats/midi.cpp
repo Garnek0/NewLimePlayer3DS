@@ -43,7 +43,7 @@ void MidiDecoder::GetInfo(metaInfo_t* Meta) {
 	if (midiInfo && midiInfo->copyright)
 		Meta->Artist.assign(midiInfo->copyright);
 	else
-		Meta->Artist.assign("(No Author-Midi)");
+		Meta->Artist.assign("(No Author)");
 }
 
 uint32_t MidiDecoder::Position(void) {

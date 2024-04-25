@@ -9,6 +9,8 @@
 
 #include "QuickSetOverlay.hpp"
 
+#include <string.h>
+
 #define MAX_LIST 14
 
 Thread thread = NULL;
@@ -102,7 +104,24 @@ void PlayerMenu::fblist(int rows, int startpoint, float size) const
 	for (int i = 0; rows-seloffs > i && i <= MAX_LIST; i++) {
 		if (seloffs+i < expInst->Size()) {
 			DirEntry drent = expInst->GetEntry(i + seloffs);
-			Gui::PrintColor(drent.filename.c_str(), 8.0f, i*size+startpoint, 0.4f, 0.4f, 0xFF000000);
+			std::string ext = drent.filename.substr(drent.filename.find_last_of('.') + 1);
+			if(!strcmp(ext.c_str(), "wav") ||
+			   !strcmp(ext.c_str(), "mp3") ||
+			   !strcmp(ext.c_str(), "mid") ||
+			   !strcmp(ext.c_str(), "midi") ||
+			   !strcmp(ext.c_str(), "opus") ||
+			   !strcmp(ext.c_str(), "flac") ||
+			   !strcmp(ext.c_str(), "ogg") ||
+			   !strcmp(ext.c_str(), "xmi") ||
+			   !strcmp(ext.c_str(), "mus") ||
+			   !strcmp(ext.c_str(), "hmi") ||
+			   !strcmp(ext.c_str(), "hmp") ||
+			   !strcmp(ext.c_str(), "pls") ||
+			   drent.directory){
+				Gui::PrintColor(drent.filename.c_str(), 8.0f, i*size+startpoint, 0.4f, 0.4f, 0xFF000000);
+			} else {
+				Gui::PrintColor(drent.filename.c_str(), 8.0f, i*size+startpoint, 0.4f, 0.4f, 0xFF888888);
+			}
 		}
 	}
 }
@@ -129,26 +148,30 @@ void menuList(int cur, int from, float startpoint, float size, int rows)
 
 void drawBrowserPlayer(playbackInfo_t* info)
 {
-	Gui::DrawImage(sprites_player_playlist_idx, 20, 15);
-	if (!PlayerInterface::GetDecoderName().empty())
-		Gui::Print(PlayerInterface::GetDecoderName(), 150.0f, 80.0f, 0.5f, 0.5f);
+	if(PlayerInterface::IsPlaying){
+		Gui::DrawImage(sprites_player_playlist_idx, 20, 15);
+		if (!PlayerInterface::GetDecoderName().empty())
+			Gui::Print(PlayerInterface::GetDecoderName(), 150.0f, 110.0f, 0.5f, 0.5f);
 
-	if (!info->fileMeta.Title.empty())
-		Gui::Print(info->fileMeta.Title, 150.0f, 20.0f, 0.5f, 0.5f);
-	else if (!info->filename.empty())
-		Gui::Print(info->filename, 150.0f, 20.0f, 0.5f, 0.5f);
-	else
-		Gui::PrintStatic("TEXT_LOADING_GENERIC", 150.0f, 20.0f, 0.5f, 0.5f);
+		if (!info->fileMeta.Title.empty())
+			Gui::Print(info->fileMeta.Title, 150.0f, 45.0f, 0.5f, 0.5f);
+		else if (!info->filename.empty())
+			Gui::Print(info->filename, 150.0f, 45.0f, 0.5f, 0.5f);
+		else
+			Gui::PrintStatic("TEXT_LOADING_GENERIC", 150.0f, 45.0f, 0.5f, 0.5f);
 
-	if (!info->fileMeta.Artist.empty())
-		Gui::Print(info->fileMeta.Artist, 150.0f, 40.0f, 0.5f, 0.5f);
-	else
-		Gui::PrintStatic("TEXT_LOADING_GENERIC", 150.0f, 40.0f, 0.5f, 0.5f);
+		if (!info->fileMeta.Artist.empty())
+			Gui::Print(info->fileMeta.Artist, 150.0f, 65.0f, 0.5f, 0.5f);
+		else
+			Gui::PrintStatic("TEXT_LOADING_GENERIC", 150.0f, 65.0f, 0.5f, 0.5f);
+	}
 }
 
 PlayerMenu::PlayerMenu() {
 	expInst = std::make_unique<Explorer>("sdmc:/");
-	expInst->ChangeDir("music");
+	if(expInst->ChangeDir("music") == EXPATH_NOEXIST){
+		Error::Thrw(E_MUSIC_DIR_NOT_FOUND);	
+	}
 	m_progressbars.emplace_back(40, 160, 240, 10, COLOR_LIMEGREEN);
 	m_buttons.emplace_back(58, 203, sprites_player_rew_idx);
 	m_buttons.emplace_back(100, 203, sprites_player_stop_idx);
@@ -192,10 +215,6 @@ void PlayerMenu::drawBottom() const
 		m_buttons[CON_FASTFOWARD].Draw();
 
 		m_progressbars[0].Draw();
-
-		Gui::Print("Position = " + std::to_string(PlayerInterface::GetTotalLength()) + "/" + std::to_string(PlayerInterface::GetCurrentPos()), 10.0f, 20.0f, 0.5f, 0.5f);
-		if (!PlayerInterface::GetTotalLength())
-			Gui::Print("Warn: Seeking not avalible for this file.", 10.0f, 40.0f, 0.5f, 0.5f);
 
 		Gui::DrawSolidRectangle(topbut[1].x, topbut[1].y, topbut[1].w, topbut[1].h, C2D_Color32(119, 131, 147, 255)); // For top buttons
 		Gui::PrintColor("Browser", 10, 0, 0.5f, 0.5f, 0xFFFFFFFF);

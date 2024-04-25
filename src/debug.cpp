@@ -12,16 +12,16 @@ static bool log_file = false;
 
 void debug_init(bool use_file) {
 	if (!is_init && use_file) {
-		File::Move("/3ds/limeplayer3ds/2.log", "/3ds/limeplayer3ds/3.log");
-		File::Move("/3ds/limeplayer3ds/1.log", "/3ds/limeplayer3ds/2.log");
-		File::Move("/3ds/limeplayer3ds/0.log", "/3ds/limeplayer3ds/1.log");
-		File::Move("/3ds/limeplayer3ds/recent.log", "/3ds/limeplayer3ds/0.log");
+		File::Move("/3ds/newlimeplayer3ds/2.log", "/3ds/newlimeplayer3ds/3.log");
+		File::Move("/3ds/newlimeplayer3ds/1.log", "/3ds/newlimeplayer3ds/2.log");
+		File::Move("/3ds/newlimeplayer3ds/0.log", "/3ds/newlimeplayer3ds/1.log");
+		File::Move("/3ds/newlimeplayer3ds/recent.log", "/3ds/newlimeplayer3ds/0.log");
 
-		logFP = fopen("/3ds/limeplayer3ds/recent.log", "w+");
+		logFP = fopen("/3ds/newlimeplayer3ds/recent.log", "w+");
 		if (logFP) {
 			is_init = true;
 			log_file = use_file;
-			debug_perform("Debug output for LimePlayer3DS version %s\nTHIS FILE IS AUTOMATICALY GENERATED PLEASE DO NOT MODIFY!\n", LIMEPLAYER_VERSION);
+			debug_perform("Debug output for NewLimePlayer3DS version %s\nTHIS FILE IS AUTOMATICALY GENERATED PLEASE DO NOT MODIFY!\n", NEWLIMEPLAYER_VERSION);
 		}
 	}
 }

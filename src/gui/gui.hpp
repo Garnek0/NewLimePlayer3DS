@@ -53,6 +53,6 @@ namespace Gui {
 
 	void DrawBaseGui(void);
 
-	void DrawError(void);
+	void DrawMessage(void);
 };
 #endif

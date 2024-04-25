@@ -62,9 +62,9 @@ namespace Player
 
 void PlayerInterface::ThreadMainFunct(void *input) {
 	playbackInfo_t* info = static_cast<playbackInfo_t*>(input);
-	stop = false;
 
-	if (info->usePlaylist == 1) {
+	if (info->usePlaylist == 1){
+		stop = false;
 		for (uint32_t i = 0; i < info->playlistfile.filepath.size() && !stop; i++) {
 			info->filepath = info->playlistfile.filepath[i];
 			Player::Play(info);
@@ -221,19 +221,20 @@ static inline void audioCallback(void *const nul_) {
 }
 
 void Player::Play(playbackInfo_t* playbackInfo) {
-	std::unique_ptr<FileTransport> transport = nullptr;
-	skip = false;
-	LightEvent_Init(&soundEvent, RESET_ONESHOT);
-
 	int filetype = File::GetFileType(playbackInfo->filepath);
 
 	if (filetype < 0) {
-		Error::Add(FILE_NOT_SUPPORTED);
+		Error::Thrw(E_FILE_NOT_SUPPORTED);
 		return;
 	} else if (filetype != FMT_NETWORK)
 		playbackInfo->filename = playbackInfo->filepath.substr(playbackInfo->filepath.find_last_of('/') + 1);
 	else if (filetype == FMT_NETWORK)
 		playbackInfo->filename = playbackInfo->filepath;
+
+	std::unique_ptr<FileTransport> transport = nullptr;
+	skip = false;
+	stop = false;
+	LightEvent_Init(&soundEvent, RESET_ONESHOT);
 
 	transport = GetTransport(filetype);
 
@@ -242,13 +243,13 @@ void Player::Play(playbackInfo_t* playbackInfo) {
 			decoder = GetFormat(playbackInfo, filetype, transport.get());
 		else {
 			if (transport->GetError().empty())
-				Error::Add(DECODER_INIT_FAIL, "Failed to open transport.");
+				Error::Thrw(E_DECODER_INIT_FAIL, "Failed to open transport.");
 			else
-				Error::Add(DECODER_INIT_FAIL, transport->GetError());
+				Error::Thrw(E_DECODER_INIT_FAIL, transport->GetError());
 			DEBUG("Failed to open transport.\n");
 		}
 	else {
-		Error::Add(DECODER_INIT_FAIL, "Failed initalize transport.");
+		Error::Thrw(E_DECODER_INIT_FAIL, "Failed initalize transport.");
 		DEBUG("Failed to initalize transport.\n");
 	}
 
@@ -375,7 +376,7 @@ std::unique_ptr<Decoder> Player::GetFormat(const playbackInfo_t* playbackInfo, i
 	else
 		DEBUG("No decoder found.\n");
 
-	Error::Add(DECODER_INIT_FAIL, errInfo);
+	Error::Thrw(E_DECODER_INIT_FAIL, errInfo);
 	return nullptr;
 }
 

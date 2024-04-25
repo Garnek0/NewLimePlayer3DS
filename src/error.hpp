@@ -1,13 +1,15 @@
 #ifndef __LIME_ERROR_H__
 #define __LIME_ERROR_H__
 
-/* Errors that can't be explained with errno */
-#define ERRORH_GENERIC			1000
-#define NDSP_INIT_FAIL			1001
-#define DECODER_INIT_FAIL		1002
-#define FILE_NOT_SUPPORTED		1003
-#define DECODER_INIT_TIMEOUT		1004
-#define UNSUPPORTED_CHANNELS		1005
+
+
+#define E_GENERIC 1
+#define E_NDSP_INIT_FAIL 2 
+#define E_DECODER_INIT_FAIL 3
+#define E_FILE_NOT_SUPPORTED 4
+#define E_DECODER_INIT_TIMEOUT 5
+#define E_UNSUPPORTED_CHANNELS 6
+#define E_MUSIC_DIR_NOT_FOUND 7
 
 #include <vector>
 #include <string>
@@ -19,17 +21,9 @@ typedef struct {
 } LimeError_t;
 
 namespace Error {
-	void Add(int err);
+	void Thrw(int err);
 
-	void Add(int err, const std::string& extraInfo);
-
-	void Remove(void);
-
-	LimeError_t Get(void);
-
-	bool IsQuered(void);
-
-	void Clear(void);
+	void Thrw(int err, const std::string& extraInfo);
 }
 
 #endif //ifndef __ERROR_H__

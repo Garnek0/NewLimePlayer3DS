@@ -32,9 +32,9 @@ include $(DEVKITARM)/3ds_rules
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
 # Your values.
-APP_TITLE           :=	LimePlayer3DS
+APP_TITLE           :=	NewLimePlayer3DS
 APP_DESCRIPTION     :=	Graphical music player for mp3, midi, and more.
-APP_AUTHOR          :=	LimePlayer Team
+APP_AUTHOR          :=	Garnek0, LimePlayer Team
 
 SOURCES		:=	src \
 			src/formats \
@@ -76,16 +76,9 @@ NODEBUG := 0
 
 VERSION_MAJOR	:=	0
 VERSION_MINOR	:=	0
-VERSION_BUILD	:=	10
-ifndef RELEASE
-VERSION_HASH	:=	$(shell git rev-parse --short HEAD)
-endif
+VERSION_BUILD	:=	1
 
-ifneq ($(VERSION_HASH),)
-VERSION_ALL	:=	"\"$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_BUILD)-$(VERSION_HASH)\""
-else
 VERSION_ALL	:=	"\"$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_BUILD)\""
-endif
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -106,7 +99,7 @@ endif
 
 CFLAGS	+=	$(INCLUDE) -D__3DS__ \
 		`arm-none-eabi-pkg-config opusfile --cflags` \
-		-DLIMEPLAYER_VERSION=$(VERSION_ALL) \
+		-DNEWLIMEPLAYER_VERSION=$(VERSION_ALL) \
 		-DNODEBUG=${NODEBUG} \
 		${CUSTOMFLAGS}
 #`curl-config --cflags` \

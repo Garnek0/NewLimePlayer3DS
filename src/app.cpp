@@ -21,6 +21,7 @@
 #include "file.hpp"
 #include "config.hpp"
 #include "TitleScreen.hpp"
+#include "PlayerMenu.hpp"
 
 bool App::exit = false;
 playbackInfo_t App::pInfo;
@@ -48,18 +49,18 @@ App::App(void) {
 	osSetSpeedupEnable(true);
 	aptSetSleepAllowed(false);
 
-	if (!File::Exists("/3ds/limeplayer3ds/config.json")) {
+	if (!File::Exists("/3ds/newlimeplayer3ds/config.json")) {
 		mkdir("/3ds/", 0777);
-		mkdir("/3ds/limeplayer3ds/", 0777);
+		mkdir("/3ds/newlimeplayer3ds/", 0777);
 
-		File::Copy("romfs:/defaultcfg/config.json", "/3ds/limeplayer3ds/config.json");
+		File::Copy("romfs:/defaultcfg/config.json", "/3ds/newlimeplayer3ds/config.json");
 
 		/*App::pInfo.settings.wildMidiConfig = "/tmp";
 		App::pInfo.settings.theme = 1;
 		App::pInfo.settings.language = 0;
-		Cfg::WriteJson("/3ds/limeplayer3ds/config.json", &App::pInfo.settings);*/
+		Cfg::WriteJson("/3ds/newlimeplayer3ds/config.json", &App::pInfo.settings);*/
 	}
-	Cfg::ParseSettings("/3ds/limeplayer3ds/config.json", &App::pInfo.settings);
+	Cfg::ParseSettings("/3ds/newlimeplayer3ds/config.json", &App::pInfo.settings);
 
 	/*{
 		App::pInfo.settings.playlist.clear();
@@ -73,12 +74,12 @@ App::App(void) {
 		App::pInfo.settings.playlist.push_back(tmp_playlist);
 	}
 
-	Cfg::WriteJson("/3ds/limeplayer3ds/config.json", &App::pInfo.settings);*/
+	Cfg::WriteJson("/3ds/newlimeplayer3ds/config.json", &App::pInfo.settings);*/
 
 	debug_init(true);
 
 	Gui::Init(&App::pInfo.settings);
-	Gui::SetMenu(std::make_unique<TitleScreen>());
+	Gui::SetMenu(std::make_unique<PlayerMenu>());
 }
 
 App::~App(void) {
@@ -95,9 +96,11 @@ void noDspFirmExit(void) {
 	consoleInit(GFX_TOP, NULL);
 	std::printf("\x1b[01;00H/////////////FATAL///ERROR////////////////////////");
 	std::printf("\x1b[03;00HNDSP could not be initalized.");
-	std::printf("\x1b[05;00HThis is probably because your dspfirm is missing.");
-	std::printf("\x1b[07;00HYou can correct this by running dsp1.");
-	std::printf("\x1b[09;00HPress start to exit.");
+	std::printf("\x1b[05;00HThis is probably because your dspfirm is missing,");
+	std::printf("\x1b[06;00Hwhich could be the result of running this software");
+	std::printf("\x1b[07;00Hunder an emulator.");
+	std::printf("\x1b[09;00HYou can correct this by running dsp1.");
+	std::printf("\x1b[11;00HPress start to exit.");
 	std::printf("\x1b[30;00H//////////////////////////////////////////////////");
 	while (aptMainLoop()) {
 		gspWaitForVBlank();

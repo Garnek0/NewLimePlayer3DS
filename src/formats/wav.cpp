@@ -33,7 +33,7 @@ WavDecoder::~WavDecoder(void) {
 }
 
 void WavDecoder::GetInfo(metaInfo_t* Meta) {
-	Meta->Artist.assign("(No Author-Wav)");
+	Meta->Artist.assign("(No Author)");
 }
 
 uint32_t WavDecoder::Position(void) {
